@@ -10,4 +10,3 @@ Second regular expression object used to retrieve domain name from netlocation s
 
 1. Netloc is requiered so input must be prefixed by [scheme:]//. for example http://abc.def.co.au/, //abc.def.co.au
 2. scheme, path,query,fragment is optional.
-3. 
