@@ -1,0 +1,22 @@
+def hash(s):
+	h = 7
+	letters="acdegilmnoprstuw"
+	for i in range(len(s)):
+		h = (h*37 + letters.index(s[i]))
+	return h
+def dhash(h):
+	the_string = []
+	s = "acdegilmnoprstuw"
+	while h>7:
+		the_string.append(s[h%37])
+		h = h/37
+	return "".join(the_string[::-1])
+
+if __name__ == "__main__":
+	the_string = raw_input()
+	try:
+		hvalue = hash(the_string)
+		d_string = dhash(hvalue)
+		print d_string
+	except:
+		print "Error : Some characters of string \""+the_string+"\" is not in string \"acdegilmnoprstuw\"."
