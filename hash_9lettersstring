@@ -15,8 +15,11 @@ def dhash(h):
 if __name__ == "__main__":
 	the_string = raw_input()
 	try:
-		hvalue = hash(the_string)
-		d_string = dhash(hvalue)
-		print d_string
+		if len(the_string)<= 9:
+			hvalue = hash(the_string)
+			d_string = dhash(hvalue)
+			print d_string
+		else:
+			print "Error: Not a valid String(length is greater than 9)."
 	except:
 		print "Error : Some characters of string \""+the_string+"\" is not in string \"acdegilmnoprstuw\"."
