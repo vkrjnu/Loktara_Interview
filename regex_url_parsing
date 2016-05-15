@@ -1,39 +1,118 @@
 import re
 
-def get_domain(url):
-    """Return top two domain levels from URI"""
-    re_rfc_3986 = re.compile(r"""
-        #RFC-3986 Generic URI components.
-        ^                                   
-        (?:(?P<scheme>[^:/?#\s]+):)?  # optional scheme
-        (?://(?P<netloc>[^/?#\s]*))    # required netlocation
-             (?P<path>[^?#\s]*)?      	# optional path
-        (?:\?(?P<query>[^#\s]*))?  		# optional query
-        (?:\#(?P<fragment>[^\s]*))?  	# optional fragment
-        $                                    
-        """, re.MULTILINE | re.VERBOSE)
-    re_domain =  re.compile(r"""
-        (?P<domain>[^. www]+(\.[A-Za-z]{2,6}){1,2})  # requiered domain up to three levels
-        (?::[0-9]*)?                      # Optional port number.
-        $                                 
-        """, 
-        re.MULTILINE | re.VERBOSE)
-    result = ""
-    m_uri = re_rfc_3986.match(url)
-    if m_uri and m_uri.group("netloc"):
-        netloc = m_uri.group("netloc")
-        m_domain = re_domain.search(netloc)
-        if m_domain and m_domain.group("domain"):
-            result = m_domain.group("domain");
-    return result
+class PythonUri:
+    def __init__(self, url=None):
+        """
+        Initialization of URL and creating regex Object.
+        Arguments
+        @type url: string or None
+
+        """
+        self.url = url
+        self.re_rfc_3986 = re.compile(r"""
+            #RFC-3986 Generic URI components.
+            ^                                   
+            (?:(?P<scheme>[^:/?#\s]+):)?    # optional scheme
+            (?:(:)?(//)?(?P<authority>[^/?#\s]+))  # required authority
+                 (?P<path>[^?#\s]*)?        # optional path
+            (?:\?(?P<query>[^#\s]*))?       # optional query
+            (?:\#(?P<fragment>[^\s]*))?     # optional fragment
+            $                                    
+            """, re.MULTILINE | re.VERBOSE)
+    def get_scheme(self):
+        """
+        get_scheme : Get scheme from URL.
+        @return : URL Scheme  or error string for not found scheme.
+
+        """
+        uri = self.re_rfc_3986.match(self.url)
+        if uri and uri.group("scheme"):
+            return "Scheme : "+uri.group("scheme")
+        else:
+            return "Scheme not found."
+    def get_authority(self):
+        """
+        Function get_authority : get authority from URL
+        @return :URL Authority string or error string for not found  authority.
+        """
+        uri = self.re_rfc_3986.match(self.url)
+        if uri and uri.group("authority"):
+            return "Authority : "+uri.group("authority")
+        else:
+            return "Authority not found."
+    def get_path(self):
+        """
+        Function get_path : get path from URL
+        @return :URL Path string or error string for not found path.
+        """
+        uri = self.re_rfc_3986.match(self.url)
+        if uri and uri.group("path"):
+            return "Net path : "+uri.group("path")
+        else:
+            return "Path not found."
+    def get_query(self):
+        """
+        Function get_query : get query string from URL
+        @return :URL query string or error string for not found query.
+        """
+        uri = self.re_rfc_3986.match(self.url)
+        if uri and uri.group("query"):
+            return "Query : "+uri.group("query")
+        else:
+            return "Query not found."
+    def get_fragment(self):
+        """
+        Function get_fragment : get fragment from URL
+        @return :URL fragment string or error string for not found fragment.
+        """
+        uri = self.re_rfc_3986.match(self.url)
+        if uri and uri.group("fragment"):
+            return "Fragment : "+uri.group("fragment")
+        else:
+            return "Fragment not found."
+    def get_domain(self):
+        """
+        Function get_fragment : get domain from URL
+        @return :URL domain string or error string for not found domain.
+        """
+        re_domain =  re.compile(r"""
+            (?P<domain>([^.\"www\"])+(\.[A-Za-z]{2,6}){1,2})  # requiered domain up to three levels
+            (?::[0-9]*)?                                     # Optional port number.
+            $                                 
+            """, 
+            re.MULTILINE | re.VERBOSE)
+        result = ""
+        uri = self.re_rfc_3986.match(self.url)
+
+        if uri and uri.group("authority"):
+            auth = uri.group("authority")
+            domain = re_domain.search(auth)
+            if domain and domain.group("domain"):
+                result = domain.group("domain");
+        if result != "":
+            return "Domain : "+result
+        else:
+            return "Domain not found."
 if __name__ == "__main__":
-	while True:
-		try:
-			url = raw_input().strip()
-			domain = get_domain(url)
-			if domain != "":
-				print domain
-		except:
-			url = None
-		if url is None:
-			break
+    while True:
+        try:
+            #URL input
+            url = raw_input("Enter URL : ").strip()
+            #PythonUri Object creation
+            obj = PythonUri(url)
+            #Scheme
+            print obj.get_scheme()
+            #Authority
+            print obj.get_authority()
+            #Path
+            print obj.get_path()
+            #Query
+            print obj.get_query()
+            #Fragment
+            print obj.get_fragment()
+            #Domain
+            print obj.get_domain()
+        except:
+        	url = None
+        if url is None:
+        	break
