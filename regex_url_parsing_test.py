@@ -1,5 +1,5 @@
 import unittest
-from pythonurl import PythonUri
+from regex_url_parsing import PythonUri
 
 class  UriTest(unittest.TestCase):
     """Tests for Python URI"""
